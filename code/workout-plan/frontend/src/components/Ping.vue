@@ -7,13 +7,13 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import apiClient from '../api/axios'
 
 const message = ref('Ładowanie...')
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/ping')
+    const response = await apiClient.get('/ping')
     message.value = response.data.message
   } catch (error) {
     message.value = 'err 😢'
