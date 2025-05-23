@@ -4,7 +4,39 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
+// Font Awesome setup
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { 
+  faEdit, 
+  faSave, 
+  faTrashAlt, 
+  faTimes, 
+  faPlus,
+  faPlusCircle,
+  faArrowLeft, 
+  faDumbbell, 
+  faInfoCircle 
+} from '@fortawesome/free-solid-svg-icons'
+
+// Add icons to the library
+library.add(
+  faEdit, 
+  faSave, 
+  faTrashAlt, 
+  faTimes, 
+  faPlus,
+  faPlusCircle,
+  faArrowLeft, 
+  faDumbbell, 
+  faInfoCircle
+)
+
 // Tworzymy instancję aplikacji Vue i podłączamy router
-createApp(App)
-    .use(router)
-    .mount('#app')
+const app = createApp(App)
+
+// Register Font Awesome component globally
+app.component('font-awesome-icon', FontAwesomeIcon)
+
+app.use(router)
+app.mount('#app')
