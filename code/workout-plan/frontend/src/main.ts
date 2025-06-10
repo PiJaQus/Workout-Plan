@@ -16,7 +16,11 @@ import {
   faPlusCircle,
   faArrowLeft, 
   faDumbbell, 
-  faInfoCircle 
+  faInfoCircle,
+  faLayerGroup,
+  faRepeat,
+  faMale,
+  faFemale
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add icons to the library
@@ -28,8 +32,12 @@ library.add(
   faPlus,
   faPlusCircle,
   faArrowLeft, 
-  faDumbbell, 
-  faInfoCircle
+  faDumbbell,
+  faInfoCircle,
+  faLayerGroup,
+  faRepeat,
+  faMale,
+  faFemale
 )
 
 // Tworzymy instancję aplikacji Vue i podłączamy router

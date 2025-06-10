@@ -53,6 +53,7 @@ const getWeeksHandler: RequestHandler = async (req, res, next) => {
         next(err);
     }
 };
+app.get('/api/weeks', getWeeksHandler);
 
 // API: Get single week by ID
 const getWeekByIdHandler: RequestHandler<{ id: string }> = async (req, res, next) => {
@@ -70,7 +71,6 @@ const getWeekByIdHandler: RequestHandler<{ id: string }> = async (req, res, next
         next(err);
     }
 };
-app.get('/api/weeks', getWeeksHandler);
 app.get('/api/weeks/:id', getWeekByIdHandler);
 
 // API: Add a new week

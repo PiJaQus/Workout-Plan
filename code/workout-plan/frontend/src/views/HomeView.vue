@@ -3,7 +3,9 @@
     <div class="container">
       <div class="home-content">
         <div class="logo">
-          <i class="fas fa-dumbbell"></i>
+          <div class="logo-inner">
+            <img src="../assets/images/pq.jpg" alt="Logo" />
+          </div>
         </div>
         <h1 class="home-title">
           Workout <span class="highlight">Plan</span>
@@ -17,7 +19,9 @@
             @click="selectOption('Man')"
           >
             <div class="profile-icon man">
-              <i class="fas fa-male"></i>
+              <div class="profile-image-container">
+                <img src="../assets/images/homeview-man.jpg" alt="For Him" />
+              </div>
             </div>
             <span>For Him</span>
           </div>
@@ -28,7 +32,9 @@
             @click="selectOption('Woman')"
           >
             <div class="profile-icon woman">
-              <i class="fas fa-female"></i>
+              <div class="profile-image-container">
+                <img src="../assets/images/homeview-woman.jpg" alt="For Her" />
+              </div>
             </div>
             <span>For Her</span>
           </div>
@@ -115,8 +121,6 @@ onMounted(() => {
   overflow: hidden;
 }
 
-
-
 @keyframes pulse {
   0% { transform: scale(1); opacity: 0.5; }
   100% { transform: scale(1.1); opacity: 0.8; }
@@ -140,16 +144,37 @@ onMounted(() => {
 .logo {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, var(--color-primary), #00b3ff);
+  position: relative;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  font-size: 2rem;
-  color: #000;
   box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
   animation: float 3s ease-in-out infinite;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-primary), #00b3ff);
+  padding: 4px;
+}
+
+.logo-inner {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Zapewnia przycięcie obrazu do kształtu koła */
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Sprawia, że obraz wypełni całą przestrzeń */
 }
 
 @keyframes float {
@@ -201,21 +226,6 @@ onMounted(() => {
   transform: translateY(-5px);
 }
 
-.profile-option.active .profile-icon {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.profile-option.active.man .profile-icon {
-  background: linear-gradient(135deg, #00b3ff, #0066ff);
-  border-color: #00b3ff;
-}
-
-.profile-option.active.woman .profile-icon {
-  background: linear-gradient(135deg, #ff6b9c, #ff2e63);
-  border-color: #ff6b9c;
-}
-
 .profile-icon {
   width: 100%;
   height: 140px;
@@ -224,11 +234,49 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  font-size: 3.5rem;
   color: white;
   background: var(--color-surface);
   border: 2px solid #333;
   transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.profile-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%); /* Domyślnie czarno-białe */
+  transition: filter 0.3s ease; /* Płynne przejście do koloru */
+}
+
+/* Przesunięcie zdjęcia mężczyzny w dół */
+.man .profile-image-container img {
+  object-position: center 40%; /* Przesunięcie w dół o 10% */
+}
+
+/* Przesunięcie zdjęcia kobiety w lewo */
+.woman .profile-image-container img {
+  object-position: left 60% ; /* Przesunięcie w dol o 10% */
+
+}
+
+/* Po aktywacji, zdjęcia stają się kolorowe */
+.profile-option.active .profile-image-container img {
+  filter: grayscale(0%); /* Kolorowe po aktywacji */
+}
+
+.profile-option.active .profile-icon {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .profile-option.man .profile-icon {

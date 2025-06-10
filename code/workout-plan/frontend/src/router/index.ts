@@ -6,6 +6,7 @@ import ManWeekView from '../views/ManWeekView.vue'
 import WomanWeekView from '../views/WomanWeekView.vue'
 
 const routes = [
+    //mappowanie url do komponentow
     { path: '/', name: 'home', component: HomeView },
     { path: '/man', name: 'man', component: ManView },
     { path: '/woman', name: 'woman', component: WomanView },

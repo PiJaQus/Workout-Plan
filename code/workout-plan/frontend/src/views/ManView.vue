@@ -9,14 +9,14 @@
       <div class="week-navigation">
         <div class="actions">
           <button class="action-button add-button" @click="openAddWeekDialog">
-            <i class="fas fa-plus"></i> Add Week
+            <font-awesome-icon icon="plus" /> Add Week
           </button>
           <button
               class="action-button delete-button"
               @click="showDeletePopup = true"
               :disabled="weeks.length === 0"
           >
-            <i class="fas fa-trash"></i> Delete Week
+            <font-awesome-icon icon="trash-alt" /> Delete Week
           </button>
         </div>
 
@@ -35,7 +35,7 @@
               {{ week.custom_name || `Week ${week.name.replace('Week ', '')}` }}
             </div>
             <div class="week-hover">
-              <i class="fas fa-arrow-right"></i>
+              <font-awesome-icon icon="arrow-right" />
             </div>
           </router-link>
         </div>
@@ -100,6 +100,7 @@
 import { ref, onMounted, computed } from 'vue'
 import apiClient from '../api/axios'
 import { useRoute } from 'vue-router'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 interface WeekSelection {
   name: string;
@@ -268,7 +269,7 @@ onMounted(fetchWeeks)
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .action-button {
@@ -614,14 +615,6 @@ onMounted(fetchWeeks)
 
   .week-card {
     min-height: 60px;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
-
-  .action-button {
-    width: 100%;
   }
 }
 </style>

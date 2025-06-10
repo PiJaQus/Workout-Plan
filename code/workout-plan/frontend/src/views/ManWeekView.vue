@@ -115,7 +115,7 @@
             <font-awesome-icon icon="dumbbell" /> Your Exercises
           </h2>
 
-          <div v-if="workouts.length === 0" class="empty-state">
+          <div v-if="workouts.length === 0" class="empty-state pt-3">
             <font-awesome-icon icon="info-circle" size="2x" />
             <p>No exercises added yet. Add your first exercise to get started!</p>
           </div>
@@ -201,9 +201,6 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button @click="cancelEdit" class="btn btn-outline">
-            <font-awesome-icon icon="times" /> Cancel
-          </button>
           <button @click="saveWorkout" class="btn btn-primary">
             <font-awesome-icon icon="save" /> Save Changes
           </button>
@@ -324,10 +321,14 @@ const saveWeekName = async () => {
 
 // Cancel editing week name
 const cancelEdit = () => {
+  // Anuluj edycję nazwy tygodnia
   isEditingWeekName.value = false;
   if (week.value) {
     editedWeekName.value = week.value.custom_name || '';
   }
+
+  // Anuluj edycję ćwiczenia (zamknij modal)
+  editingWorkout.value = null;
 };
 
 // Add a new workout
@@ -679,6 +680,7 @@ label {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
+  margin-top:1rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
