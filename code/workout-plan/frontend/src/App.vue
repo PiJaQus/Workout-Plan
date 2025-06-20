@@ -64,9 +64,6 @@ onMounted(() => {
 .app-nav {
   background-color: var(--color-surface);
   box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -140,7 +137,6 @@ onMounted(() => {
 @media (max-width: 768px) {
   .app-nav .container {
     height: auto;
-    flex-direction: column;
     padding: 1rem;
     gap: 1rem;
   }
