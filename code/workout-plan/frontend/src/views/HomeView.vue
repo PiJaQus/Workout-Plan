@@ -4,7 +4,7 @@
       <div class="home-content">
         <div class="logo">
           <div class="logo-inner">
-            <img src="../assets/images/pq.jpg" alt="Logo" />
+            <img src="/assets/images/pq.jpg" alt="Logo" />
           </div>
         </div>
         <h1 class="home-title">
@@ -20,7 +20,7 @@
           >
             <div class="profile-icon man">
               <div class="profile-image-container">
-                <img src="../assets/images/homeview-man.jpg" alt="For Him" />
+                <img src="/assets/images/homeview-man.jpg" alt="For Him" />
               </div>
             </div>
             <span>For Him</span>
@@ -33,7 +33,7 @@
           >
             <div class="profile-icon woman">
               <div class="profile-image-container">
-                <img src="../assets/images/homeview-woman.jpg" alt="For Her" />
+                <img src="/assets/images/homeview-woman.jpg" alt="For Her" />
               </div>
             </div>
             <span>For Her</span>

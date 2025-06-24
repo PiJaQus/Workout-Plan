@@ -28,7 +28,11 @@
               </div>
             </div>
           </div>
-
+          <div v-if="!isEditingWeekName" class="back-button">
+            <button @click="startEditingWeekName" class="edit-link">
+              <font-awesome-icon icon="pen-to-square" />
+            </button>
+          </div>
           <div v-if="!isEditingWeekName" class="back-button">
             <router-link to="/man" class="back-link">
               <font-awesome-icon icon="arrow-left" />
@@ -96,6 +100,41 @@
               placeholder="Any additional notes..."
             ></textarea>
           </div>
+          <div class="form-group">
+            <label>Muscle Groups</label>
+            <div class="muscle-figure-container">
+              <div class="muscle-figure">
+                <!-- Base figure-->
+                <div class="base-figure"></div>
+
+                <!-- Overlay for each selected muscle group -->
+                <div
+                    v-for="muscleId in newWorkout.muscleGroups"
+                    :key="'overlay-' + muscleId"
+                    :class="['muscle-overlay', 'muscle-' + muscleId]"
+                    :title="getMuscleName(muscleId)">
+                </div>
+              </div>
+            </div>
+            <div class="muscle-selector">
+              <div class="muscle-diagram">
+                <div class="muscle-option"
+                     v-for="muscle in muscleGroups"
+                     :key="muscle.id"
+                     :class="{ 'selected': isMuscleSelected(muscle.id) }"
+                     @click="toggleMuscle(muscle.id)"
+                     :title="muscle.name">
+                  <img :src="getMuscleImage(muscle.id)" :alt="muscle.name" class="muscle-image" />
+                </div>
+              </div>
+              <div class="selected-muscles">
+                <span v-for="muscleId in newWorkout.muscleGroups" :key="muscleId" class="muscle-tag">
+                  {{ getMuscleName(muscleId) }}
+                </span>
+              </div>
+
+            </div>
+          </div>
           <div class="form-buttons">
             <button class="btn btn-cancel" @click="cancelAddWorkout">
               <font-awesome-icon icon="times" /> Cancel
@@ -135,7 +174,13 @@
                 <p v-if="workout.notes" class="workout-notes">{{ workout.notes }}</p>
               </div>
               <div class="action-buttons">
-                <button @click="editWorkout(workout)" class="icon-button edit-btn" aria-label="Edit">
+                <button class="icon-button" aria-label="MuscleImage">
+                  <font-awesome-icon icon="image" />
+                </button>
+                <button @click="showMuscleGroup(workout)" class="icon-button muscle-btn" aria-label="Show muscle groups">
+                  <font-awesome-icon icon="person" />
+                </button>
+                <button @click="editWorkout(workorut)" class="icon-button edit-btn" aria-label="Edit">
                   <font-awesome-icon icon="edit" />
                 </button>
                 <button @click="deleteWorkout(workout.id)" class="icon-button delete-btn" aria-label="Delete">
@@ -208,6 +253,36 @@
       </div>
     </div>
   </div>
+  <!-- Modal z grupami mięśni -->
+  <transition name="fade">
+    <div v-if="showMuscleModal" class="modal-overlay" @click.self="closeMuscleModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>{{ selectedWorkout?.name || 'Grupy mięśni' }}</h3>
+          <button @click="closeMuscleModal" class="close-button">
+            <font-awesome-icon icon="arrow-left" />
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="muscle-preview">
+            <div class="muscle-figure">
+              <div class="base-figure"></div>
+              <div
+                  v-for="muscleId in selectedWorkout?.muscleGroups || []"
+                  :key="muscleId"
+                  :class="['muscle-overlay', 'muscle-' + muscleId]"
+                  :title="getMuscleName(muscleId)">
+              </div>
+            </div>
+
+            <div v-if="!selectedWorkout?.muscleGroups?.length" class="no-muscles">
+              Brak przypisanych grup mięśni
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -237,8 +312,10 @@ interface Workout {
   reps: string;
   notes: string;
   week_id: number;
+  muscleGroups?: string[];
 }
-
+const showMuscleModal = ref(false)
+const selectedWorkout = ref<Workout | null>(null)
 const route = useRoute()
 const weekId = ref<string>(route.params.id as string)
 const week = ref<{ id?: number; name: string; custom_name?: string } | null>(null)
@@ -248,7 +325,8 @@ const newWorkout = ref({
   sets: 3,
   reps: '8-12',
   notes: '',
-  week_id: 0
+  week_id: 0,
+  muscleGroups: [] as string[]
 })
 
 const editingWorkout = ref<Workout | null>(null)
@@ -256,6 +334,51 @@ const isEditingWeekName = ref(false)
 const editedWeekName = ref('')
 const weekNameInput = ref<HTMLInputElement | null>(null)
 const showAddWorkoutForm = ref(false)
+
+const muscleGroups = ref([
+  { id: 'shoulders', name: 'Shoulders' },
+  { id: 'abs2', name: 'Abs2' },
+  { id: 'chest', name: 'Chest' },
+  { id: 'biceps', name: 'Biceps' },
+  { id: 'ass', name: 'Ass' },
+  { id: 'forearms', name: 'Forearms' },
+  { id: 'abs', name: 'Abs' },
+  { id: 'quads', name: 'Quadriceps' },
+  { id: 'hamstrings', name: 'Hamstrings' },
+])
+
+const showMuscleGroup = (workout: Workout) => {
+  selectedWorkout.value = workout
+  showMuscleModal.value = true
+}
+
+const closeMuscleModal = () => {
+  showMuscleModal.value = false
+  selectedWorkout.value = null
+}
+const isMuscleSelected = (muscleId: string) => {
+  return newWorkout.value.muscleGroups?.includes(muscleId) || false
+}
+const toggleMuscle = (muscleId: string) => {
+  if (!newWorkout.value.muscleGroups) {
+    newWorkout.value.muscleGroups = []
+  }
+
+  const index = newWorkout.value.muscleGroups.indexOf(muscleId)
+  if (index === -1) {
+    newWorkout.value.muscleGroups.push(muscleId)
+  } else {
+    newWorkout.value.muscleGroups.splice(index, 1)
+  }
+}
+
+const getMuscleName = (muscleId: string) => {
+  const muscle = muscleGroups.value.find(m => m.id === muscleId)
+  return muscle ? muscle.name : muscleId
+}
+const getMuscleImage = (muscleId: string) => {
+  return `/assets/images/${muscleId}.png`
+}
 
 // Fetch week details
 const fetchWeek = async () => {
@@ -340,7 +463,8 @@ const addWorkout = async () => {
       name: newWorkout.value.name.trim(),
       sets: newWorkout.value.sets,
       reps: newWorkout.value.reps,
-      notes: newWorkout.value.notes
+      notes: newWorkout.value.notes,
+      muscleGroups: newWorkout.value.muscleGroups
     })
 
     workouts.value.push(response.data)
@@ -363,7 +487,9 @@ const resetNewWorkoutForm = () => {
     name: '',
     sets: 3,
     reps: '8-12',
-    notes: ''
+    notes: '',
+    week_id: 0,
+    muscleGroups: []
   }
 }
 
@@ -449,7 +575,8 @@ onMounted(() => {
   margin-left: 1rem;
 }
 
-.back-link {
+.back-link,
+.edit-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -459,10 +586,13 @@ onMounted(() => {
   background-color: #222;
   color: #26e07f;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
   transition: all 0.3s;
 }
 
-.back-link:hover {
+.back-link:hover,
+.edit-link:hover {
   background-color: #333;
 }
 
@@ -769,7 +899,7 @@ label {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 90%;
+  width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
@@ -808,6 +938,214 @@ label {
   height: 2rem;
 }
 
+.edit-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+  background: #45a049;
+}
+
+.muscle-selector {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.muscle-diagram {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.muscle-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.muscle-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+}
+
+.muscle-option:hover {
+  border-color: #26e07f;
+  background-color: #f8f9fa;
+}
+
+.muscle-option.selected {
+  border-color: #26e07f;
+  background-color: #e8f8f0;
+  box-shadow: 0 0 0 2px rgba(38, 224, 127, 0.3);
+}
+
+.muscle-image {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+
+.selected-muscles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.muscle-tag {
+  background-color: #26e07f;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.muscle-figure-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.muscle-figure {
+  position: relative;
+  width: 200px; /* Adjust based on your figure size */
+  height: 400px; /* Adjust based on your figure size */
+}
+
+.base-figure {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* base figure image */
+  background-image: url('/assets/images/0.png');
+}
+
+.muscle-overlay {
+  position: absolute;
+  pointer-events: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+
+.muscle-chest {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/2.png');
+}
+
+.muscle-abs2 {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/3.png');
+}
+
+.muscle-shoulders {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/1.png');
+}
+
+.muscle-biceps {
+  top: 0;
+  left: 1%;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/4.png');
+}
+
+.muscle-forearms {
+  top: 0;
+  left: 1%;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/5.png');
+}
+
+.muscle-ass {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/6.png');
+}
+
+.muscle-abs {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/7.png');
+}
+.muscle-quads {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/8.png');
+}
+
+.muscle-hamstrings {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/9.png');
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+
+
 /* Media queries dla telefonów */
 @media (max-width: 768px) {
   .container {
@@ -838,5 +1176,8 @@ label {
   .section-title {
     font-size: 1.5rem;
   }
+}
+.muscle-preview{
+  justify-items: center;
 }
 </style>

@@ -20,7 +20,8 @@ import {
   faLayerGroup,
   faRepeat,
   faMale,
-  faFemale
+  faFemale,
+  faImage
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add icons to the library
@@ -37,7 +38,8 @@ library.add(
   faLayerGroup,
   faRepeat,
   faMale,
-  faFemale
+  faFemale,
+    faImage
 )
 
 // Tworzymy instancję aplikacji Vue i podłączamy router
