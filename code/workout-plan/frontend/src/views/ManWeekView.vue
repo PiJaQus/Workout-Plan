@@ -10,19 +10,29 @@
             </h1>
             <div v-else-if="week" class="week-edit-container">
               <div class="week-input-wrapper">
-                <input type="text" class="week-name-input" v-model="editedWeekName" ref="weekNameInput" />
+                <input type="text" class="week-name-input" v-model="editedWeekName" ref="weekNameInput"/>
               </div>
               <div class="week-edit-buttons">
-                <button class="btn btn-primary" @click="saveWeekName"><font-awesome-icon icon="save"/> Save</button>
-                <button class="btn btn-cancel" @click="cancelEdit"><font-awesome-icon icon="times"/> Cancel</button>
+                <button class="btn btn-primary" @click="saveWeekName">
+                  <font-awesome-icon icon="save"/>
+                  Save
+                </button>
+                <button class="btn btn-cancel" @click="cancelEdit">
+                  <font-awesome-icon icon="times"/>
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
           <div v-if="!isEditingWeekName" class="back-button">
-            <button @click="startEditingWeekName" class="edit-link"><font-awesome-icon icon="pen-to-square"/></button>
+            <button @click="startEditingWeekName" class="edit-link">
+              <font-awesome-icon icon="pen-to-square"/>
+            </button>
           </div>
           <div v-if="!isEditingWeekName" class="back-button">
-            <router-link to="/man" class="back-link"><font-awesome-icon icon="arrow-left"/></router-link>
+            <router-link to="/man" class="back-link">
+              <font-awesome-icon icon="arrow-left"/>
+            </router-link>
           </div>
         </div>
       </div>
@@ -32,7 +42,8 @@
         <!-- Przycisk do pokazania formularza -->
         <div v-if="!showAddWorkoutForm" class="card show-form-card">
           <button class="btn btn-primary btn-block" @click="showAddWorkoutForm = true">
-            <font-awesome-icon icon="plus-circle"/> Add New Exercise
+            <font-awesome-icon icon="plus-circle"/>
+            Add New Exercise
           </button>
         </div>
         <!-- koniec do pokazania formularza -->
@@ -40,19 +51,22 @@
         <!-- Formularz dodawania nowego treningu -->
         <div v-if="showAddWorkoutForm" class="card workout-form-card">
           <h2 class="card-title">
-            <font-awesome-icon icon="plus-circle"/> Add New Exercise
+            <font-awesome-icon icon="plus-circle"/>
+            Add New Exercise
             <button class="icon-button close-button" @click="cancelAddWorkout">
               <font-awesome-icon icon="times"/>
             </button>
           </h2>
           <div class="form-group">
             <label for="exercise-name">Exercise Name</label>
-            <input id="exercise-name" v-model="newWorkout.name" type="text" class="form-control" placeholder="e.g., Bench Press">
+            <input id="exercise-name" v-model="newWorkout.name" type="text" class="form-control"
+                   placeholder="e.g., Bench Press">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="sets">Sets</label>
-              <input id="sets" v-model.number="newWorkout.sets" type="number" min="1" class="form-control" placeholder="3">
+              <input id="sets" v-model.number="newWorkout.sets" type="number" min="1" class="form-control"
+                     placeholder="3">
             </div>
             <div class="form-group">
               <label for="reps">Reps</label>
@@ -61,44 +75,53 @@
           </div>
           <div class="form-group">
             <label for="notes">Notes (optional)</label>
-            <textarea id="notes" v-model="newWorkout.notes" class="form-control" rows="2" placeholder="Any additional notes..."></textarea>
+            <textarea id="notes" v-model="newWorkout.notes" class="form-control" rows="2"
+                      placeholder="Any additional notes..."></textarea>
           </div>
           <div class="form-group">
             <label>Muscle Groups</label>
             <div class="muscle-figure-container">
               <div class="muscle-figure">
                 <div class="base-figure"></div>
-                <div v-for="muscleId in newWorkout.muscleGroups" :key="'overlay-' + muscleId" :class="['muscle-overlay', 'muscle-' + muscleId]" :title="getMuscleName(muscleId)"></div>
+                <div v-for="muscleId in newWorkout.muscleGroups" :key="'overlay-' + muscleId"
+                     :class="['muscle-overlay', 'muscle-' + muscleId]" :title="getMuscleName(muscleId)"></div>
               </div>
             </div>
             <div class="muscle-selector">
               <div class="muscle-diagram">
-                <div class="muscle-option" v-for="muscle in muscleGroups" :key="muscle.id" :class="{ 'selected': isMuscleSelected(muscle.id) }" @click="toggleMuscle(muscle.id)" :title="muscle.name">
+                <div class="muscle-option" v-for="muscle in muscleGroups" :key="muscle.id"
+                     :class="{ 'selected': isMuscleSelected(muscle.id) }" @click="toggleMuscle(muscle.id)"
+                     :title="muscle.name">
                   <img :src="getMuscleImage(muscle.id)" :alt="muscle.name" class="muscle-image"/>
                 </div>
               </div>
               <div class="selected-muscles">
-                <span v-for="muscleId in newWorkout.muscleGroups" :key="muscleId" class="muscle-tag">{{ getMuscleName(muscleId) }}</span>
+                <span v-for="muscleId in newWorkout.muscleGroups" :key="muscleId"
+                      class="muscle-tag">{{ getMuscleName(muscleId) }}</span>
               </div>
             </div>
           </div>
           <div class="form-buttons">
-            <button class="btn btn-cancel" @click="cancelAddWorkout"><font-awesome-icon icon="times"/> Cancel</button>
-            <button class="btn btn-primary" @click="addWorkout"><font-awesome-icon icon="plus-circle"/> Add Exercise</button>
+            <button class="btn btn-cancel" @click="cancelAddWorkout">
+              <font-awesome-icon icon="times"/>
+              Cancel
+            </button>
+            <button class="btn btn-primary" @click="addWorkout">
+              <font-awesome-icon icon="plus-circle"/>
+              Add Exercise
+            </button>
           </div>
         </div>
 
 
         <!-- Odstęp między sekcjami -->
         <div class="section-spacer"></div>
-
-
-
-         <ExerciseView :workouts="workouts"
-                       @delete-workout="handleDelete"
-                       @edit-workout="startEditWorkout"
-                       @show-muscle-group="openMuscleModal"
-                       foo="true"/>
+        
+        <ExerciseView :workouts="workouts"
+                      @delete-workout="handleDelete"
+                      @edit-workout="startEditWorkout"
+                      @show-muscle-group="openMuscleModal"
+                      foo="true"/>
 
 
       </div>
@@ -109,8 +132,13 @@
     <div v-if="editingWorkout" class="modal-overlay" @click.self="cancelEdit">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><font-awesome-icon icon="edit"/> Edit Exercise</h3>
-          <button class="icon-button close-button" @click="cancelEdit"><font-awesome-icon icon="times"/></button>
+          <h3>
+            <font-awesome-icon icon="edit"/>
+            Edit Exercise
+          </h3>
+          <button class="icon-button close-button" @click="cancelEdit">
+            <font-awesome-icon icon="times"/>
+          </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -133,7 +161,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button @click="saveWorkout" class="btn btn-primary"><font-awesome-icon icon="save"/> Save Changes</button>
+          <button @click="saveWorkout" class="btn btn-primary">
+            <font-awesome-icon icon="save"/>
+            Save Changes
+          </button>
         </div>
       </div>
     </div>
@@ -169,7 +200,6 @@ import muscleGroups from "../types/MuscleGroups.ts";
 library.add(faEdit, faTrashAlt, faPlus, faPlusCircle, faDumbbell, faInfoCircle, faSave, faTimes, faSpinner)
 
 
-
 const showMuscleModal = ref(false)
 const selectedWorkout = ref<Workout | null>(null)
 const route = useRoute()
@@ -190,7 +220,6 @@ const isEditingWeekName = ref(false)
 const editedWeekName = ref('')
 const weekNameInput = ref<HTMLInputElement | null>(null)
 const showAddWorkoutForm = ref(false)
-
 
 
 const closeMuscleModal = () => {
@@ -398,7 +427,9 @@ const handleDelete = async (id: number) => {
     await apiClient.delete(`/workouts/${id}`)
     const idx = workouts.value.findIndex(w => w.id === id)
     if (idx !== -1) workouts.value.splice(idx, 1)
-  } catch (e){ console.error(e) }
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 const startEditWorkout = (workout: Workout) => {
@@ -670,7 +701,6 @@ label {
 }
 
 
-
 .workout-meta div {
   display: flex;
   align-items: center;
@@ -833,7 +863,7 @@ label {
 }
 
 .muscle-figure {
-  align-items:center ;
+  align-items: center;
   position: relative;
   width: 200px; /* Adjust based on your figure size */
   height: 400px; /* Adjust based on your figure size */
@@ -858,7 +888,6 @@ label {
   opacity: 0.8;
   transition: opacity 0.2s;
 }
-
 
 
 .modal-overlay {
@@ -930,6 +959,7 @@ label {
   height: 100%;
   background-image: url('/assets/images/7.png');
 }
+
 .muscle-quads {
   top: 0;
   left: 0;
