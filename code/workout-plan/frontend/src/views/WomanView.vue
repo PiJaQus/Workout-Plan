@@ -1,4 +1,5 @@
 <template>
+
   <div class="container text-center mt-5">
     <h1>Woman's Workout Plan 💪</h1>
     <p>This section is for woman who want to improve their fitness.</p>

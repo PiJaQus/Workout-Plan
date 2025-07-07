@@ -1,4 +1,5 @@
 <template>
+
   <div class="home">
     <div class="container">
       <div class="home-content">

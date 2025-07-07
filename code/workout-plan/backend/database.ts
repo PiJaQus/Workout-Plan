@@ -30,6 +30,7 @@ export const connectToDB = async (): Promise<Database> => {
       sets INTEGER DEFAULT 3,
       reps TEXT DEFAULT '8-12',
       notes TEXT,
+      muscle_groups TEXT,
       FOREIGN KEY (week_id) REFERENCES weeks (id) ON DELETE CASCADE
     )`)
 

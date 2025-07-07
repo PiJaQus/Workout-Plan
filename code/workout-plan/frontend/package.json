@@ -13,12 +13,14 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "pinia": "^3.0.2",
     "router": "^2.2.0",
     "vue": "^3.5.13",
+    "vue-draggable-next": "^2.2.1",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

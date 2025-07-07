@@ -7,14 +7,23 @@ interface Week {
   name: string;
   custom_name: string | null;
 }
-
+interface DBWorkout {
+    id?: number;
+    week_id: number;
+    name: string;
+    sets: number;
+    reps: string;
+    notes: string;
+    muscle_groups?: string;
+}
 interface Workout {
-  id?: number;
-  week_id: number;
-  name: string;
-  sets: number;
-  reps: string;
-  notes: string;
+    id?: number;
+    week_id: number;
+    name: string;
+    sets: number;
+    reps: string;
+    notes: string;
+    muscleGroups: string[];
 }
 
 const app: Express = express();
@@ -168,6 +177,17 @@ const deleteWeekHandler: RequestHandler = async (req, res, next) => {
 app.delete('/api/weeks/:id', deleteWeekHandler);
 
 // API: Get workouts for a week
+const transformWorkout = (workout: DBWorkout): Workout => {
+  const {
+    muscle_groups,
+    ...rest
+  } = workout;
+  return {
+    ...rest,
+    muscleGroups: muscle_groups ? JSON.parse(muscle_groups) : []
+  };
+};
+
 const getWorkoutsForWeekHandler: RequestHandler = async (req, res, next) => {
     try {
         const { weekId } = req.params;
@@ -183,12 +203,14 @@ const getWorkoutsForWeekHandler: RequestHandler = async (req, res, next) => {
             res.status(404).json({ error: 'Week not found' });
             return;
         }
-        
-        const workouts = await db.all(
+
+        const workouts: DBWorkout[] = await db.all(
             'SELECT * FROM workouts WHERE week_id = ? ORDER BY id',
             weekIdNum
         );
-        res.json(workouts);
+
+        const transformedWorkouts = workouts.map(transformWorkout);
+        res.json(transformedWorkouts);
     } catch (err) {
         next(err);
     }
@@ -217,14 +239,19 @@ const addWorkoutHandler: RequestHandler = async (req, res, next) => {
             res.status(404).json({ error: 'Week not found' });
             return;
         }
-        
+
+        const { muscleGroups } = req.body;
         const result = await db.run(
-            'INSERT INTO workouts (week_id, name, sets, reps, notes) VALUES (?, ?, ?, ?, ?)',
-            [weekIdNum, name, sets || 3, reps || '8-12', notes || '']
+            'INSERT INTO workouts (week_id, name, sets, reps, notes, muscle_groups) VALUES (?, ?, ?, ?, ?, ?)',
+            [weekIdNum, name, sets || 3, reps || '8-12', notes || '', JSON.stringify(muscleGroups || [])]
         );
         
         const workout = await db.get('SELECT * FROM workouts WHERE id = ?', result.lastID);
-        res.status(201).json(workout);
+        if (workout) {
+          res.status(201).json(transformWorkout(workout));
+        } else {
+          res.status(404).json({ error: 'Workout not found after creation' });
+        }
     } catch (err) {
         next(err);
     }
@@ -253,14 +280,18 @@ const updateWorkoutHandler: RequestHandler = async (req, res, next) => {
             res.status(404).json({ error: 'Workout not found' });
             return;
         }
-        
+        const {muscleGroups} = req.body
         await db.run(
-            'UPDATE workouts SET name = ?, sets = ?, reps = ?, notes = ? WHERE id = ?',
-            [name, sets || 3, reps || '8-12', notes || '', workoutId]
+            'UPDATE workouts SET name = ?, sets = ?, reps = ?, notes = ?, muscle_groups = ? WHERE id = ?',
+            [name, sets || 3, reps || '8-12', notes || '', JSON.stringify(muscleGroups || []), workoutId]
         );
         
         const workout = await db.get('SELECT * FROM workouts WHERE id = ?', workoutId);
-        res.json(workout);
+        if (workout) {
+          res.json(transformWorkout(workout));
+        } else {
+          res.status(404).json({ error: 'Workout not found after update' });
+        }
     } catch (err) {
         next(err);
     }
@@ -348,4 +379,3 @@ process.on('uncaughtException', (error) => {
 });
 
 startServer();
-

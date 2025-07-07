@@ -8,287 +8,147 @@
             <h1 v-if="!isEditingWeekName && week" class="week-title" @click="startEditingWeekName">
               {{ week.custom_name || week.name }}
             </h1>
-
             <div v-else-if="week" class="week-edit-container">
               <div class="week-input-wrapper">
-                <input
-                  type="text"
-                  class="week-name-input"
-                  v-model="editedWeekName"
-                  ref="weekNameInput"
-                />
+                <input type="text" class="week-name-input" v-model="editedWeekName" ref="weekNameInput" />
               </div>
               <div class="week-edit-buttons">
-                <button class="btn btn-primary" @click="saveWeekName">
-                  <font-awesome-icon icon="save" /> Save
-                </button>
-                <button class="btn btn-cancel" @click="cancelEdit">
-                  <font-awesome-icon icon="times" /> Cancel
-                </button>
+                <button class="btn btn-primary" @click="saveWeekName"><font-awesome-icon icon="save"/> Save</button>
+                <button class="btn btn-cancel" @click="cancelEdit"><font-awesome-icon icon="times"/> Cancel</button>
               </div>
             </div>
           </div>
           <div v-if="!isEditingWeekName" class="back-button">
-            <button @click="startEditingWeekName" class="edit-link">
-              <font-awesome-icon icon="pen-to-square" />
-            </button>
+            <button @click="startEditingWeekName" class="edit-link"><font-awesome-icon icon="pen-to-square"/></button>
           </div>
           <div v-if="!isEditingWeekName" class="back-button">
-            <router-link to="/man" class="back-link">
-              <font-awesome-icon icon="arrow-left" />
-            </router-link>
+            <router-link to="/man" class="back-link"><font-awesome-icon icon="arrow-left"/></router-link>
           </div>
         </div>
       </div>
+      <!-- End Header -->
 
       <div class="content-wrapper">
         <!-- Przycisk do pokazania formularza -->
         <div v-if="!showAddWorkoutForm" class="card show-form-card">
           <button class="btn btn-primary btn-block" @click="showAddWorkoutForm = true">
-            <font-awesome-icon icon="plus-circle" /> Add New Exercise
+            <font-awesome-icon icon="plus-circle"/> Add New Exercise
           </button>
         </div>
+        <!-- koniec do pokazania formularza -->
 
         <!-- Formularz dodawania nowego treningu -->
         <div v-if="showAddWorkoutForm" class="card workout-form-card">
           <h2 class="card-title">
-            <font-awesome-icon icon="plus-circle" /> Add New Exercise
+            <font-awesome-icon icon="plus-circle"/> Add New Exercise
             <button class="icon-button close-button" @click="cancelAddWorkout">
-              <font-awesome-icon icon="times" />
+              <font-awesome-icon icon="times"/>
             </button>
           </h2>
           <div class="form-group">
             <label for="exercise-name">Exercise Name</label>
-            <input
-              id="exercise-name"
-              v-model="newWorkout.name"
-              type="text"
-              class="form-control"
-              placeholder="e.g., Bench Press"
-            >
+            <input id="exercise-name" v-model="newWorkout.name" type="text" class="form-control" placeholder="e.g., Bench Press">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="sets">Sets</label>
-              <input
-                id="sets"
-                v-model.number="newWorkout.sets"
-                type="number"
-                min="1"
-                class="form-control"
-                placeholder="3"
-              >
+              <input id="sets" v-model.number="newWorkout.sets" type="number" min="1" class="form-control" placeholder="3">
             </div>
             <div class="form-group">
               <label for="reps">Reps</label>
-              <input
-                id="reps"
-                v-model="newWorkout.reps"
-                type="text"
-                class="form-control"
-                placeholder="8-12"
-              >
+              <input id="reps" v-model="newWorkout.reps" type="text" class="form-control" placeholder="8-12">
             </div>
           </div>
           <div class="form-group">
             <label for="notes">Notes (optional)</label>
-            <textarea
-              id="notes"
-              v-model="newWorkout.notes"
-              class="form-control"
-              rows="2"
-              placeholder="Any additional notes..."
-            ></textarea>
+            <textarea id="notes" v-model="newWorkout.notes" class="form-control" rows="2" placeholder="Any additional notes..."></textarea>
           </div>
           <div class="form-group">
             <label>Muscle Groups</label>
             <div class="muscle-figure-container">
               <div class="muscle-figure">
-                <!-- Base figure-->
                 <div class="base-figure"></div>
-
-                <!-- Overlay for each selected muscle group -->
-                <div
-                    v-for="muscleId in newWorkout.muscleGroups"
-                    :key="'overlay-' + muscleId"
-                    :class="['muscle-overlay', 'muscle-' + muscleId]"
-                    :title="getMuscleName(muscleId)">
-                </div>
+                <div v-for="muscleId in newWorkout.muscleGroups" :key="'overlay-' + muscleId" :class="['muscle-overlay', 'muscle-' + muscleId]" :title="getMuscleName(muscleId)"></div>
               </div>
             </div>
             <div class="muscle-selector">
               <div class="muscle-diagram">
-                <div class="muscle-option"
-                     v-for="muscle in muscleGroups"
-                     :key="muscle.id"
-                     :class="{ 'selected': isMuscleSelected(muscle.id) }"
-                     @click="toggleMuscle(muscle.id)"
-                     :title="muscle.name">
-                  <img :src="getMuscleImage(muscle.id)" :alt="muscle.name" class="muscle-image" />
+                <div class="muscle-option" v-for="muscle in muscleGroups" :key="muscle.id" :class="{ 'selected': isMuscleSelected(muscle.id) }" @click="toggleMuscle(muscle.id)" :title="muscle.name">
+                  <img :src="getMuscleImage(muscle.id)" :alt="muscle.name" class="muscle-image"/>
                 </div>
               </div>
               <div class="selected-muscles">
-                <span v-for="muscleId in newWorkout.muscleGroups" :key="muscleId" class="muscle-tag">
-                  {{ getMuscleName(muscleId) }}
-                </span>
+                <span v-for="muscleId in newWorkout.muscleGroups" :key="muscleId" class="muscle-tag">{{ getMuscleName(muscleId) }}</span>
               </div>
-
             </div>
           </div>
           <div class="form-buttons">
-            <button class="btn btn-cancel" @click="cancelAddWorkout">
-              <font-awesome-icon icon="times" /> Cancel
-            </button>
-            <button class="btn btn-primary" @click="addWorkout">
-              <font-awesome-icon icon="plus-circle" /> Add Exercise
-            </button>
+            <button class="btn btn-cancel" @click="cancelAddWorkout"><font-awesome-icon icon="times"/> Cancel</button>
+            <button class="btn btn-primary" @click="addWorkout"><font-awesome-icon icon="plus-circle"/> Add Exercise</button>
           </div>
         </div>
+
 
         <!-- Odstęp między sekcjami -->
         <div class="section-spacer"></div>
 
-        <!-- Lista ćwiczeń -->
-        <div class="workouts-list">
-          <h2 class="section-title">
-            <font-awesome-icon icon="dumbbell" /> Your Exercises
-          </h2>
 
-          <div v-if="workouts.length === 0" class="empty-state pt-3">
-            <font-awesome-icon icon="info-circle" size="2x" />
-            <p>No exercises added yet. Add your first exercise to get started!</p>
-          </div>
 
-          <div v-else class="workout-items">
-            <div v-for="workout in workouts" :key="workout.id" class="workout-card">
-              <div class="workout-details">
-                <h3 class="workout-name">{{ workout.name }}</h3>
-                <div class="workout-meta">
-                  <div>
-                    <font-awesome-icon icon="layer-group" /> {{ workout.sets }} sets
-                  </div>
-                  <div>
-                    <font-awesome-icon icon="repeat" /> {{ workout.reps }} reps
-                  </div>
-                </div>
-                <p v-if="workout.notes" class="workout-notes">{{ workout.notes }}</p>
-              </div>
-              <div class="action-buttons">
-                <button class="icon-button" aria-label="MuscleImage">
-                  <font-awesome-icon icon="image" />
-                </button>
-                <button @click="showMuscleGroup(workout)" class="icon-button muscle-btn" aria-label="Show muscle groups">
-                  <font-awesome-icon icon="person" />
-                </button>
-                <button @click="editWorkout(workorut)" class="icon-button edit-btn" aria-label="Edit">
-                  <font-awesome-icon icon="edit" />
-                </button>
-                <button @click="deleteWorkout(workout.id)" class="icon-button delete-btn" aria-label="Delete">
-                  <font-awesome-icon icon="trash-alt" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+         <ExerciseView :workouts="workouts"
+                       @delete-workout="handleDelete"
+                       @edit-workout="startEditWorkout"
+                       @show-muscle-group="openMuscleModal"
+                       foo="true"/>
+
+
       </div>
     </div>
+
 
     <!-- Modal edycji ćwiczenia -->
     <div v-if="editingWorkout" class="modal-overlay" @click.self="cancelEdit">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>
-            <font-awesome-icon icon="edit" /> Edit Exercise
-          </h3>
-          <button class="icon-button close-button" @click="cancelEdit">
-            <font-awesome-icon icon="times" />
-          </button>
+          <h3><font-awesome-icon icon="edit"/> Edit Exercise</h3>
+          <button class="icon-button close-button" @click="cancelEdit"><font-awesome-icon icon="times"/></button>
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label for="edit-exercise-name">Exercise Name</label>
-            <input
-              id="edit-exercise-name"
-              v-model="editingWorkout.name"
-              type="text"
-              class="form-control"
-            >
+            <input id="edit-exercise-name" v-model="editingWorkout.name" type="text" class="form-control">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="edit-sets">Sets</label>
-              <input
-                id="edit-sets"
-                v-model.number="editingWorkout.sets"
-                type="number"
-                min="1"
-                class="form-control"
-              >
+              <input id="edit-sets" v-model.number="editingWorkout.sets" type="number" min="1" class="form-control">
             </div>
             <div class="form-group">
               <label for="edit-reps">Reps</label>
-              <input
-                id="edit-reps"
-                v-model="editingWorkout.reps"
-                type="text"
-                class="form-control"
-              >
+              <input id="edit-reps" v-model="editingWorkout.reps" type="text" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label for="edit-notes">Notes (optional)</label>
-            <textarea
-              id="edit-notes"
-              v-model="editingWorkout.notes"
-              class="form-control"
-              rows="3"
-            ></textarea>
+            <textarea id="edit-notes" v-model="editingWorkout.notes" class="form-control" rows="3"></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button @click="saveWorkout" class="btn btn-primary">
-            <font-awesome-icon icon="save" /> Save Changes
-          </button>
+          <button @click="saveWorkout" class="btn btn-primary"><font-awesome-icon icon="save"/> Save Changes</button>
         </div>
       </div>
     </div>
+    <!-- Koniec modalu edycji ćwiczenia -->
+
+    <MuscleGroupView :show="showMuscleModal" @close="closeMuscleModal" :workout="selectedWorkout"></MuscleGroupView>
+
   </div>
-  <!-- Modal z grupami mięśni -->
-  <transition name="fade">
-    <div v-if="showMuscleModal" class="modal-overlay" @click.self="closeMuscleModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>{{ selectedWorkout?.name || 'Grupy mięśni' }}</h3>
-          <button @click="closeMuscleModal" class="close-button">
-            <font-awesome-icon icon="arrow-left" />
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="muscle-preview">
-            <div class="muscle-figure">
-              <div class="base-figure"></div>
-              <div
-                  v-for="muscleId in selectedWorkout?.muscleGroups || []"
-                  :key="muscleId"
-                  :class="['muscle-overlay', 'muscle-' + muscleId]"
-                  :title="getMuscleName(muscleId)">
-              </div>
-            </div>
-
-            <div v-if="!selectedWorkout?.muscleGroups?.length" class="no-muscles">
-              Brak przypisanych grup mięśni
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
-import { library } from '@fortawesome/fontawesome-svg-core'
+
+import {ref, onMounted, watch, nextTick} from 'vue'
+import {Workout} from '../types/Workout'
+import {useRoute} from 'vue-router'
+import {library} from '@fortawesome/fontawesome-svg-core'
 import {
   faEdit,
   faTrashAlt,
@@ -298,22 +158,18 @@ import {
   faInfoCircle,
   faSave,
   faTimes,
-  faSpinner
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons'
 import apiClient from '../api/axios'
+import ExerciseView from "../components/ExerciseView.vue";
+import MuscleGroupView from "../components/muscleGroup/MuscleGroupView.vue";
+import muscleGroups from "../types/MuscleGroups.ts";
 
 // Dodaj ikony do biblioteki
 library.add(faEdit, faTrashAlt, faPlus, faPlusCircle, faDumbbell, faInfoCircle, faSave, faTimes, faSpinner)
 
-interface Workout {
-  id: number;
-  name: string;
-  sets: number;
-  reps: string;
-  notes: string;
-  week_id: number;
-  muscleGroups?: string[];
-}
+
+
 const showMuscleModal = ref(false)
 const selectedWorkout = ref<Workout | null>(null)
 const route = useRoute()
@@ -335,27 +191,13 @@ const editedWeekName = ref('')
 const weekNameInput = ref<HTMLInputElement | null>(null)
 const showAddWorkoutForm = ref(false)
 
-const muscleGroups = ref([
-  { id: 'shoulders', name: 'Shoulders' },
-  { id: 'abs2', name: 'Abs2' },
-  { id: 'chest', name: 'Chest' },
-  { id: 'biceps', name: 'Biceps' },
-  { id: 'ass', name: 'Ass' },
-  { id: 'forearms', name: 'Forearms' },
-  { id: 'abs', name: 'Abs' },
-  { id: 'quads', name: 'Quadriceps' },
-  { id: 'hamstrings', name: 'Hamstrings' },
-])
 
-const showMuscleGroup = (workout: Workout) => {
-  selectedWorkout.value = workout
-  showMuscleModal.value = true
-}
 
 const closeMuscleModal = () => {
   showMuscleModal.value = false
   selectedWorkout.value = null
 }
+const props = defineProps<{ id: string }>();
 const isMuscleSelected = (muscleId: string) => {
   return newWorkout.value.muscleGroups?.includes(muscleId) || false
 }
@@ -370,10 +212,11 @@ const toggleMuscle = (muscleId: string) => {
   } else {
     newWorkout.value.muscleGroups.splice(index, 1)
   }
+
 }
 
 const getMuscleName = (muscleId: string) => {
-  const muscle = muscleGroups.value.find(m => m.id === muscleId)
+  const muscle = muscleGroups.find(m => m.id === muscleId)
   return muscle ? muscle.name : muscleId
 }
 const getMuscleImage = (muscleId: string) => {
@@ -456,24 +299,33 @@ const cancelEdit = () => {
 
 // Add a new workout
 const addWorkout = async () => {
-  if (!newWorkout.value.name.trim()) return
-
   try {
-    const response = await apiClient.post(`/weeks/${weekId.value}/workouts`, {
-      name: newWorkout.value.name.trim(),
+    const workoutData = {
+      name: newWorkout.value.name,
       sets: newWorkout.value.sets,
       reps: newWorkout.value.reps,
       notes: newWorkout.value.notes,
-      muscleGroups: newWorkout.value.muscleGroups
-    })
+      muscleGroups: newWorkout.value.muscleGroups || []
+    };
 
-    workouts.value.push(response.data)
-    resetNewWorkoutForm()
-    showAddWorkoutForm.value = false // Ukryj formularz po dodaniu
+    const response = await apiClient.post(`/weeks/${weekId.value}/workouts`, workoutData);
+    workouts.value.push(response.data);
+    resetWorkoutForm();
+    showAddWorkoutForm.value = false;
   } catch (error) {
-    console.error('Error adding workout:', error)
+    console.error('Error adding workout:', error);
   }
-}
+};
+
+const resetWorkoutForm = () => {
+  newWorkout.value = {
+    name: '',
+    sets: 3,
+    reps: '8-12',
+    notes: '',
+    muscleGroups: []
+  };
+};
 
 // Cancel adding new workout
 const cancelAddWorkout = () => {
@@ -494,44 +346,35 @@ const resetNewWorkoutForm = () => {
 }
 
 // Start editing a workout
-const editWorkout = (workout: Workout) => {
-  editingWorkout.value = { ...workout }
-}
+
 
 // Save edited workout
 const saveWorkout = async () => {
-  if (!editingWorkout.value) return
+  if (!editingWorkout.value) return;
 
   try {
-    const response = await apiClient.put(`/workouts/${editingWorkout.value.id}`, {
-      ...editingWorkout.value
-    })
+    const workoutData = {
+      name: editingWorkout.value.name,
+      sets: editingWorkout.value.sets,
+      reps: editingWorkout.value.reps,
+      notes: editingWorkout.value.notes,
+      muscleGroups: editingWorkout.value.muscleGroups || []
+    };
 
-    // Aktualizacja ćwiczenia w lokalnej tablicy
-    const index = workouts.value.findIndex(w => w.id === editingWorkout.value?.id)
+    const response = await apiClient.put(`/workouts/${editingWorkout.value.id}`, workoutData);
+    const index = workouts.value.findIndex(w => w.id === editingWorkout.value?.id);
     if (index !== -1) {
-      workouts.value[index] = { ...response.data }
+      workouts.value[index] = response.data;
     }
-    editingWorkout.value = null
+    editingWorkout.value = null; // Prawidłowe zamknięcie modala
   } catch (error) {
-    console.error('Error updating workout:', error)
+    console.error('Error saving workout:', error);
+    // Opcjonalnie: pokaż użytkownikowi komunikat o błędzie
   }
-}
+};
 
 // Delete a workout
-const deleteWorkout = async (id: number) => {
-  if (!confirm('Are you sure you want to delete this workout?')) return
 
-  try {
-    const response = await apiClient.delete(`/workouts/${id}`)
-
-    if (response.ok) {
-      workouts.value = workouts.value.filter(w => w.id !== id)
-    }
-  } catch (error) {
-    console.error('Error deleting workout:', error)
-  }
-}
 
 // Watch for route changes
 watch(() => route.params.id, (newId) => {
@@ -540,16 +383,45 @@ watch(() => route.params.id, (newId) => {
     fetchWeek()
     fetchWorkouts()
   }
-}, { immediate: true })
+}, {immediate: true})
 
 // Fetch data on component mount
 onMounted(() => {
-  fetchWeek()
   fetchWorkouts()
+  fetchWeek()
 })
+
+// ---------- event handlers for child components ----------
+const handleDelete = async (id: number) => {
+  if (!confirm('Are you sure you want to delete this workout?')) return;
+  try {
+    await apiClient.delete(`/workouts/${id}`)
+    const idx = workouts.value.findIndex(w => w.id === id)
+    if (idx !== -1) workouts.value.splice(idx, 1)
+  } catch (e){ console.error(e) }
+}
+
+const startEditWorkout = (workout: Workout) => {
+  editingWorkout.value = {...workout}
+}
+
+const openMuscleModal = (workout: Workout) => {
+  selectedWorkout.value = {...workout}
+  showMuscleModal.value = true
+}
 </script>
 
-<style scoped>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .workout-page {
   padding: 1rem;
   min-height: 100vh;
@@ -589,6 +461,7 @@ onMounted(() => {
   border: none;
   cursor: pointer;
   transition: all 0.3s;
+  min-height: 44px; /* Łatwiejsze dotykanie na telefonach */
 }
 
 .back-link:hover,
@@ -652,15 +525,6 @@ onMounted(() => {
   gap: 0.5rem;
 }
 
-@media (max-width: 768px) {
-  .week-edit-buttons {
-    flex-direction: column;
-  }
-
-  .week-edit-buttons .btn {
-    width: 100%;
-  }
-}
 
 .content-wrapper {
   display: flex;
@@ -805,34 +669,7 @@ label {
   gap: 1rem;
 }
 
-.workout-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  margin-top:1rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
 
-.workout-details {
-  flex: 1;
-}
-
-.workout-name {
-  margin: 0 0 0.5rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.workout-meta {
-  display: flex;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-  color: #666;
-}
 
 .workout-meta div {
   display: flex;
@@ -841,45 +678,6 @@ label {
 
 .workout-meta svg {
   margin-right: 0.3rem;
-}
-
-.workout-notes {
-  margin: 0.5rem 0 0;
-  font-size: 0.9rem;
-  color: #666;
-  font-style: italic;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.icon-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 4px;
-  border: none;
-  background-color: transparent;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.icon-button:hover {
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.edit-btn:hover {
-  color: #28a745;
-}
-
-.delete-btn:hover {
-  color: #dc3545;
 }
 
 .modal-overlay {
@@ -893,6 +691,7 @@ label {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 2rem;
 }
 
 .modal-content {
@@ -927,6 +726,15 @@ label {
   color: #28a745;
 }
 
+.modal-header .subtitle {
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-top: 4px;
+  margin-left: 2rem;
+  font-weight: normal;
+  display: block;
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -936,24 +744,6 @@ label {
 
 .section-spacer {
   height: 2rem;
-}
-
-.edit-button {
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.edit-button:hover {
-  background: #45a049;
 }
 
 .muscle-selector {
@@ -990,11 +780,6 @@ label {
 
 }
 
-.muscle-option:hover {
-  border-color: #26e07f;
-  background-color: #f8f9fa;
-}
-
 .muscle-option.selected {
   border-color: #26e07f;
   background-color: #e8f8f0;
@@ -1014,6 +799,14 @@ label {
   margin-top: 1rem;
 }
 
+.selected-muscle-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .muscle-tag {
   background-color: #26e07f;
   color: white;
@@ -1022,6 +815,12 @@ label {
   font-size: 0.8rem;
   display: inline-flex;
   align-items: center;
+}
+
+.no-muscles {
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
 }
 
 .muscle-figure-container {
@@ -1034,6 +833,7 @@ label {
 }
 
 .muscle-figure {
+  align-items:center ;
   position: relative;
   width: 200px; /* Adjust based on your figure size */
   height: 400px; /* Adjust based on your figure size */
@@ -1059,6 +859,21 @@ label {
   transition: opacity 0.2s;
 }
 
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+}
 
 .muscle-chest {
   top: 0;
@@ -1130,21 +945,18 @@ label {
   height: 100%;
   background-image: url('/assets/images/9.png');
 }
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  justify-items: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 2rem;
+
+
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+  }
+
+  .muscle-figure {
+    width: 180px;
+    height: 360px;
+  }
 }
-
-
 
 /* Media queries dla telefonów */
 @media (max-width: 768px) {
@@ -1176,8 +988,17 @@ label {
   .section-title {
     font-size: 1.5rem;
   }
-}
-.muscle-preview{
-  justify-items: center;
+
+  .muscle-preview {
+    justify-items: center;
+  }
+
+  .week-edit-buttons {
+    flex-direction: column;
+  }
+
+  .week-edit-buttons .btn {
+    width: 100%;
+  }
 }
 </style>
