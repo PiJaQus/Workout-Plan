@@ -57,27 +57,7 @@
               <font-awesome-icon icon="times"/>
             </button>
           </h2>
-          <div class="form-group">
-            <label for="exercise-name">Exercise Name</label>
-            <input id="exercise-name" v-model="newWorkout.name" type="text" class="form-control"
-                   placeholder="e.g., Bench Press">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="sets">Sets</label>
-              <input id="sets" v-model.number="newWorkout.sets" type="number" min="1" class="form-control"
-                     placeholder="3">
-            </div>
-            <div class="form-group">
-              <label for="reps">Reps</label>
-              <input id="reps" v-model="newWorkout.reps" type="text" class="form-control" placeholder="8-12">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="notes">Notes (optional)</label>
-            <textarea id="notes" v-model="newWorkout.notes" class="form-control" rows="2"
-                      placeholder="Any additional notes..."></textarea>
-          </div>
+          <ExerciseContent :workout="newWorkout" idPrefix="new" />
           <div class="form-group">
             <label>Muscle Groups</label>
             <div class="muscle-figure-container">
@@ -112,8 +92,6 @@
             </button>
           </div>
         </div>
-
-
         <!-- Odstęp między sekcjami -->
         <div class="section-spacer"></div>
         
@@ -126,7 +104,6 @@
 
       </div>
     </div>
-
 
     <!-- Modal edycji ćwiczenia -->
     <div v-if="editingWorkout" class="modal-overlay" @click.self="cancelEdit">
@@ -141,24 +118,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label for="edit-exercise-name">Exercise Name</label>
-            <input id="edit-exercise-name" v-model="editingWorkout.name" type="text" class="form-control">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="edit-sets">Sets</label>
-              <input id="edit-sets" v-model.number="editingWorkout.sets" type="number" min="1" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="edit-reps">Reps</label>
-              <input id="edit-reps" v-model="editingWorkout.reps" type="text" class="form-control">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="edit-notes">Notes (optional)</label>
-            <textarea id="edit-notes" v-model="editingWorkout.notes" class="form-control" rows="3"></textarea>
-          </div>
+          <ExerciseContent :workout="editingWorkout" idPrefix="edit"/>
         </div>
         <div class="modal-footer">
           <button @click="saveWorkout" class="btn btn-primary">
@@ -195,6 +155,7 @@ import apiClient from '../api/axios'
 import ExerciseView from "../components/ExerciseView.vue";
 import MuscleGroupView from "../components/muscleGroup/MuscleGroupView.vue";
 import muscleGroups from "../types/MuscleGroups.ts";
+import ExerciseContent from '../components/exercise/ExerciseContent.vue'
 
 // Dodaj ikony do biblioteki
 library.add(faEdit, faTrashAlt, faPlus, faPlusCircle, faDumbbell, faInfoCircle, faSave, faTimes, faSpinner)

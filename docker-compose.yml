@@ -28,5 +28,5 @@ services:
       - ./code/workout-plan/backend:/home/node/app
       - ./data:/home/node/data
     ports:
-      - "3000:3000"
+      - "3001:3001"
     command: sh -c "npm install && npm run backend"
