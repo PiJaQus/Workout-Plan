@@ -11,13 +11,7 @@
         </div>
         <div class="modal-body">
           <div class="muscle-preview">
-            <div class="muscle-figure">
-              <div class="base-figure"></div>
-              <div v-for="muscleId in workout?.muscleGroups || []"
-                   :key="muscleId"
-                   :class="['muscle-overlay', 'muscle-' + muscleId]"
-                   :title="getMuscleName(muscleId)"></div>
-            </div>
+            <MuscleFigure :workout="workout"/>
             <div v-if="!(workout?.muscleGroups?.length)" class="no-muscles">
               Brak przypisanych grup mięśni
             </div>
@@ -36,6 +30,7 @@
 <script setup lang="ts">
 import { Workout } from "../../types/Workout";
 import muscleGroups from "../../types/MuscleGroups.ts";
+import MuscleFigure from "./MuscleFigure.vue"
 
 const props = defineProps<{
   show: boolean,

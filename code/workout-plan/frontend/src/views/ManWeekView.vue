@@ -61,11 +61,8 @@
           <div class="form-group">
             <label>Muscle Groups</label>
             <div class="muscle-figure-container">
-              <div class="muscle-figure">
-                <div class="base-figure"></div>
-                <div v-for="muscleId in newWorkout.muscleGroups" :key="'overlay-' + muscleId"
-                     :class="['muscle-overlay', 'muscle-' + muscleId]" :title="getMuscleName(muscleId)"></div>
-              </div>
+              <!-- preview selected muscles for new workout -->
+              <MuscleFigure :muscleGroups="newWorkout.muscleGroups" />
             </div>
             <div class="muscle-selector">
               <div class="muscle-diagram">
@@ -94,7 +91,7 @@
         </div>
         <!-- Odstęp między sekcjami -->
         <div class="section-spacer"></div>
-        
+
         <ExerciseView :workouts="workouts"
                       @delete-workout="handleDelete"
                       @edit-workout="startEditWorkout"
@@ -154,6 +151,7 @@ import {
 import apiClient from '../api/axios'
 import ExerciseView from "../components/ExerciseView.vue";
 import MuscleGroupView from "../components/muscleGroup/MuscleGroupView.vue";
+import MuscleFigure from "../components/muscleGroup/MuscleFigure.vue";
 import muscleGroups from "../types/MuscleGroups.ts";
 import ExerciseContent from '../components/exercise/ExerciseContent.vue'
 
