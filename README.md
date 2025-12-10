@@ -6,7 +6,7 @@ The app allows users to create personalized training plans, track exercises, and
 
 ---
 
-##Features
+## Features
 
 ### Landing Page  
 - Clean and minimal UI  
@@ -34,25 +34,26 @@ The app allows users to create personalized training plans, track exercises, and
 
 ---
 
-## 📦 Status  
+## Status  
 The application is **actively in production** and continuously improved.
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Landing Page
-![Landingpage](./public/screenshots/landing.png)
+<img width="628" height="1196" alt="Bildschirmfoto 2025-12-10 um 15 00 48" src="https://github.com/user-attachments/assets/3ede85b4-4796-43bf-aab2-1eb8d6f4c88c" />
 
 ### Create Exercise
-![Create Exercise](./public/screenshots/create-exercise.png)
+<img width="628" height="1196" alt="Bildschirmfoto 2025-12-10 um 15 00 48" src="https://github.com/user-attachments/assets/b67852f7-c063-42de-9579-f525b5e7f8b3" />
 
 ### Trained Muscles  
-![Muscles](./public/screenshots/muscles.png)
+<img width="637" height="540" alt="Bildschirmfoto 2025-12-10 um 15 02 19" src="https://github.com/user-attachments/assets/a1cadc66-39b9-4183-9c52-8e5ba18d1aef" />
+
 
 ---
 
-## 📌 Author  
+## Author  
 Developed by **Kevin Owczarzak**
 
 ---
