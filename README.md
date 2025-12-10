@@ -12,6 +12,12 @@ The app allows users to create personalized training plans, track exercises, and
 - Clean and minimal UI  
 - Gender profile selection (For Him / For Her)  
 - Guided onboarding into workout creation
+  
+### Weekly + Daily Workout Structure  
+- Create multiple training weeks 
+- Add specific days inside each week (e.g., Push, Pull, Legs, Full Body)  
+- Each day can hold its own list of exercises  
+- Flexible structure to create long-term workout cycles
 
 ### Create Exercise  
 - Add custom exercises with sets, reps, and notes  
