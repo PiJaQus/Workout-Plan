@@ -42,7 +42,8 @@ The application is **actively in production** and continuously improved.
 ## Screenshots
 
 ### Landing Page
-<img width="628" height="1196" alt="Bildschirmfoto 2025-12-10 um 15 00 48" src="https://github.com/user-attachments/assets/3ede85b4-4796-43bf-aab2-1eb8d6f4c88c" />
+<img width="638" height="669" alt="Bildschirmfoto 2025-12-10 um 14 58 45" src="https://github.com/user-attachments/assets/c5fc5829-f6cb-4ae4-9de4-6c517d6ac80a" />
+
 
 ### Create Exercise
 <img width="628" height="1196" alt="Bildschirmfoto 2025-12-10 um 15 00 48" src="https://github.com/user-attachments/assets/b67852f7-c063-42de-9579-f525b5e7f8b3" />
